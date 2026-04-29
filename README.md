@@ -1,18 +1,75 @@
-# nosql_template
+# Графовая вики по Властелину Колец
+
+Каталог сущностей вселенной “Властелина колец” (персонажи, локации, предметы, эпохи и связи) в виде графа (Neo4j) с веб-интерфейсом и REST API.
+
+## Стек
+
+- **Язык**: Python 3.12
+- **Бэкенд-фреймворк**: Django 5.2, Django REST Framework
+- **NoSQL**: Ne4j, APOC, OGM neomodel
+- **SQL**: SQLite (в планах перейти на PostgreSQL)
+- **Аутентификация**: JWT (SimpleJWT) + RBAC
+- **Спецификация API и документация**: OpenAPI 3.0 / Swagger, drf-spectacular для валидации
+- **Контейнеризация**: Docker Compose
+
+## Доступно в версии 0.5:
+
+- **Auth**: регистрация и авторизация на JWT, роли `admin` / `viewer`, тестовые юзеры, профиль пользователя
+- **Pages**: получение страницы по `slug`, редактирование/удаление для admin
+- **Likes**: like/unlike для страниц
+- **Catalogs**: каталоги сущностей (список + многокритериальные фильтры и поиск, server-side пагинация)
+- **Search**: глобальный поиск по `names`
+- **Demo data**: заполнение тестовыми данными при старте (если БД пустая)
+- **Docker Compose**: воспроизводимый запуск backend + Neo4j
+
+## Быстрый старт
+
+### Требования
+- `Docker` + `Docker compose v3`
+
+### Запуск проекта
+
+1. Клонируйте репозиторий и перейдите в директорию проекта:
+```bash
+git clone https://github.com/moevm/nsql1h26-lotr.git
+cd nsql1h26-lotr
+```
+
+2. Создайте файл `.env` в корне проекта (можно скопировать из `.env.example`):
+```bash
+cp .env.example .env
+```
+Значения можно оставить по умолчанию.
+
+3. Соберите и запустите контейнеры:
+```bash
+docker compose build --no-cache && docker compose up
+```
+Дождитесь готовности всех сервисов. Не бойтесь спама в логах, это шалит OGM neomodel, и однажды мы разберёмся как это отключить.
+
+4. Приложение доступно в браузере по адресу: `http://localhost:8081`, API - `http://localhost:8080/api/v1`, OpenAPI/Swagger - `http://localhost:8080/api/v1/docs`
+
+Веб интерфейс:
+<img width="1904" height="908" alt="image" src="https://github.com/user-attachments/assets/ec2b2634-7ff1-48bf-b488-b63882557fde" />
+
+Документация:
+<img width="1904" height="908" alt="image" src="https://github.com/user-attachments/assets/32c9307b-4e95-4484-8b60-5d68a4c69a61" />
 
 
-## Предварительная проверка заданий
 
-<a href=" ./../../../actions/workflows/1_helloworld.yml" >![1. Согласована и сформулирована тема курсовой]( ./../../actions/workflows/1_helloworld.yml/badge.svg)</a>
+### Отладочные пользователи
 
-<a href=" ./../../../actions/workflows/2_usecase.yml" >![2. Usecase]( ./../../actions/workflows/2_usecase.yml/badge.svg)</a>
+При первом запуске создаются два пользователя.
 
-<a href=" ./../../../actions/workflows/3_data_model.yml" >![3. Модель данных]( ./../../actions/workflows/3_data_model.yml/badge.svg)</a>
+| Логин | Пароль | Роль | Возможности |
+| ----- | ------ | ---- | ----------- |
+| `viewer` | `viewer123` | `viewer` | Чтение каталогов и страниц (доступно также анонимно), лайки |
+| `admin` | `admin123` | `admin` | + Создание, редактирование, удаление сущностей, просмотр всего |
 
-<a href=" ./../../../actions/workflows/4_prototype_store_and_view.yml" >![4. Прототип хранение и представление]( ./../../actions/workflows/4_prototype_store_and_view.yml/badge.svg)</a>
+### В ближайшем времени будет реализовано:
 
-<a href=" ./../../../actions/workflows/5_prototype_analysis.yml" >![5. Прототип анализ]( ./../../actions/workflows/5_prototype_analysis.yml/badge.svg)</a> 
-
-<a href=" ./../../../actions/workflows/6_report.yml" >![6. Пояснительная записка]( ./../../actions/workflows/6_report.yml/badge.svg)</a>
-
-<a href=" ./../../../actions/workflows/7_app_is_ready.yml" >![7. App is ready]( ./../../actions/workflows/7_app_is_ready.yml/badge.svg)</a>
+- Просмотр профилей других пользователей
+- Комментарии под статьями
+- Массовый импорт/экспорт
+- Страницы с аналитикой и статистикой
+- Покрытие тестами и настройка CI
