@@ -31,8 +31,8 @@
 
 1. Клонируйте репозиторий и перейдите в директорию проекта:
 ```bash
-git clone https://github.com/moevm/nsql1h26-lotr.git
-cd nsql1h26-lotr
+git clone https://github.com/rinkkiarsam/lotr-wiki.git
+cd lotr-wiki
 ```
 
 2. Создайте файл `.env` в корне проекта (можно скопировать из `.env.example`):
